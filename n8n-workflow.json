@@ -1,0 +1,354 @@
+{
+  "name": "Game Content Generator",
+  "nodes": [
+    {
+      "parameters": {
+        "jsCode": "// Lấy dữ liệu từ webhook approval\nconst approvalData = items[0].json.body || items[0].json;\n\nconsole.log('Approval data received:', JSON.stringify(approvalData, null, 2));\n\n// Đảm bảo dữ liệu có đúng format\nconst result = {\n  prompt: String(approvalData.prompt || 'No prompt'),\n  type: String(approvalData.type || 'Unknown Type'), \n  model: String(approvalData.model || 'Unknown Model'),\n  content: String(approvalData.content || 'No content')\n};\n\nconsole.log('Processed approval data:', result);\n\nreturn [\n  {\n    json: result\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -144,
+        416
+      ],
+      "id": "35c4d6cf-4cb0-406e-ae58-ad03ce2650a1",
+      "name": "Process Approval"
+    },
+    {
+      "parameters": {
+        "resource": "databasePage",
+        "databaseId": {
+          "__rl": true,
+          "value": "https://www.notion.so/23cdcb18a3b281dfa81cc25319f49492?v=23cdcb18a3b2814f8d5b000c3c7cd5b4",
+          "mode": "url"
+        },
+        "propertiesUi": {
+          "propertyValues": [
+            {
+              "key": "Type|title",
+              "title": "={{ $json.type || 'Unknown Type' }}"
+            },
+            {
+              "key": "Prompt|rich_text",
+              "textContent": "={{ $json.prompt || 'No prompt' }}"
+            },
+            {
+              "key": "AI Output|rich_text",
+              "textContent": "={{ $json.content || 'No content' }}"
+            },
+            {
+              "key": "Status|select",
+              "selectValue": "Approved"
+            },
+            {
+              "key": "Created At|date",
+              "date": "={{ new Date().toISOString() }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.notion",
+      "typeVersion": 2.2,
+      "position": [
+        80,
+        416
+      ],
+      "id": "38ae3fb9-c46d-4655-9f21-c4df29d38795",
+      "name": "Save to Notion",
+      "credentials": {
+        "notionApi": {
+          "id": "o0iW3omm9pvgrb3N",
+          "name": "Notion Game Token"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "approve-content",
+        "responseMode": "responseNode",
+        "options": {
+          "responseHeaders": {
+            "entries": [
+              {
+                "name": "Access-Control-Allow-Origin",
+                "value": "*"
+              },
+              {
+                "name": "Access-Control-Allow-Methods",
+                "value": "POST, GET, OPTIONS"
+              },
+              {
+                "name": "Access-Control-Allow-Headers",
+                "value": "Content-Type"
+              }
+            ]
+          }
+        }
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -352,
+        416
+      ],
+      "id": "d82efe96-9857-433a-975c-96bdc43141f7",
+      "name": "Approval Webhook",
+      "webhookId": "3f583b51-89ac-4fae-87be-f31483708291"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify({ \n  success: true,\n  message: 'Content approved and saved to Notion successfully',\n  data: $json\n}) }}",
+        "options": {
+          "responseHeaders": {
+            "entries": [
+              {
+                "name": "Access-Control-Allow-Origin",
+                "value": "*"
+              },
+              {
+                "name": "Access-Control-Allow-Methods",
+                "value": "POST, GET, OPTIONS"
+              },
+              {
+                "name": "Access-Control-Allow-Headers",
+                "value": "Content-Type"
+              }
+            ]
+          }
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        304,
+        416
+      ],
+      "id": "b1662ca2-3d26-4d10-a72f-28a91a24d4cb",
+      "name": "Send Approval Response"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify({\n  success: true,\n  result: $json.aiOutput,\n  content: $json.aiOutput,\n  type: $json.type,\n  prompt: $json.prompt,\n  model: $json.model\n}) }}",
+        "options": {
+          "responseHeaders": {
+            "entries": [
+              {
+                "name": "Access-Control-Allow-Origin",
+                "value": "*"
+              },
+              {
+                "name": "Access-Control-Allow-Methods",
+                "value": "POST, GET, OPTIONS"
+              },
+              {
+                "name": "Access-Control-Allow-Headers",
+                "value": "Content-Type"
+              }
+            ]
+          }
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        576,
+        208
+      ],
+      "id": "1e086237-4adb-47fd-876a-c43f685822e6",
+      "name": "Return Generated Content"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Lấy kết quả HTTP\nconst httpResponse = items[0].json;\n\n// Lấy dữ liệu từ webhook đầu tiên thông qua node reference\nconst webhookData = $node[\"Receive Prompt\"].json.body || $node[\"Receive Prompt\"].json;\nconst prompt = webhookData.prompt || \"Unknown Prompt\";\nconst type = webhookData.type || \"Unknown Type\";\nconst model = webhookData.model || \"openai/gpt-3.5-turbo\";\n\nconsole.log('Parse Response - webhook data:', webhookData);\nconsole.log('Parse Response - extracted:', { prompt, type, model });\n\nconst aiOutput = httpResponse.choices?.[0]?.message?.content || \"No output\";\nconst createdAt = new Date().toISOString();\n\nreturn [\n  {\n    json: {\n      type: type,\n      prompt: prompt,\n      model: model,\n      aiOutput: aiOutput,\n      createdAt: createdAt,\n      status: \"pending_approval\"\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        304,
+        208
+      ],
+      "id": "aa7e9958-4d8d-4f44-bae9-70c20e965774",
+      "name": "Parse Response"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://openrouter.ai/api/v1/chat/completions",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer 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"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "HTTP-Referer",
+              "value": "http://localhost:5678"
+            },
+            {
+              "name": "X-Title",
+              "value": "n8n-Test"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"model\": \"{{ $json.model }}\",\n  \"messages\": [\n    {\n      \"role\": \"user\",\n      \"content\": \"{{ $json.prompt }}\"\n    }\n  ],\n  \"temperature\": {{ $json.temperature || 0.7 }}\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        80,
+        208
+      ],
+      "id": "61010137-6f9f-4af3-baab-b728729d8218",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Lấy dữ liệu từ webhook body\nconst webhookData = items[0].json.body || items[0].json;\n\nconsole.log('Webhook data received:', JSON.stringify(webhookData, null, 2));\n\n// Lấy prompt, type, model từ request body\nconst prompt = webhookData.prompt || \"Give me a fantasy NPC name.\";\nconst type = webhookData.type || \"NPC Name\";\nconst model = webhookData.model || \"openai/gpt-3.5-turbo\";\nconst temperature = webhookData.temperature || 0.7;\n\nconsole.log('Processed data:', { prompt, type, model, temperature });\n\n// Trả về dữ liệu cho HTTP request\nreturn [\n  {\n    json: {\n      prompt: prompt,\n      type: type,\n      model: model,\n      temperature: temperature\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -144,
+        208
+      ],
+      "id": "a795cd9c-feac-4c59-a01f-fc727385d90a",
+      "name": "Process Input"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "generate-content",
+        "responseMode": "responseNode",
+        "options": {
+          "responseHeaders": {
+            "entries": [
+              {
+                "name": "Access-Control-Allow-Origin",
+                "value": "*"
+              },
+              {
+                "name": "Access-Control-Allow-Methods",
+                "value": "POST, GET, OPTIONS"
+              },
+              {
+                "name": "Access-Control-Allow-Headers",
+                "value": "Content-Type"
+              }
+            ]
+          }
+        }
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -352,
+        208
+      ],
+      "id": "7253ffbc-a18c-4019-a014-8da766f2270c",
+      "name": "Receive Prompt",
+      "webhookId": "41c20422-4df6-4d7f-9388-decd988b99c2"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Approval Webhook": {
+      "main": [
+        [
+          {
+            "node": "Process Approval",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Process Approval": {
+      "main": [
+        [
+          {
+            "node": "Save to Notion",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Save to Notion": {
+      "main": [
+        [
+          {
+            "node": "Send Approval Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Response": {
+      "main": [
+        [
+          {
+            "node": "Return Generated Content",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Parse Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Process Input": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Receive Prompt": {
+      "main": [
+        [
+          {
+            "node": "Process Input",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "9fcd744e-ab0c-4db6-ac8a-991f46e2814e",
+  "meta": {
+    "instanceId": "ae9171feeae6c917c230737466e987eaf3a55aa4130d844a99a476ba9cef1782"
+  },
+  "id": "FQgQKXtKj9JAGJPu",
+  "tags": []
+}
