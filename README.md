@@ -1,40 +1,45 @@
-🎮 AI Game Content Generator
+# 🎮 AI Game Content Generator
 
 A powerful web application that generates game content using AI and manages it through automated workflows with Notion integration.
 
-🌟 Overview
+## 🌟 Overview
+
 This project is a comprehensive AI-powered game content generation system that streamlines the process of creating game assets like NPC names, character descriptions, item details, and more. It features an intuitive web interface, automated AI content generation, and seamless integration with Notion for content management.
-✨ Features
-🤖 AI Content Generation
 
-Multiple AI Models: Support for various OpenRouter AI models (GPT-3.5, GPT-4, Claude, etc.)
-Customizable Prompts: Flexible prompt system for different content types
-Temperature Control: Adjustable creativity levels for AI responses
-Real-time Generation: Instant content creation with live preview
+## ✨ Features
 
-🔄 Automated Workflow
+### 🤖 AI Content Generation
 
-N8N Integration: Sophisticated workflow automation using N8N
-Content Approval System: Review and approve generated content before saving
-Notion Database Sync: Automatic saving of approved content to Notion
-Webhook Architecture: RESTful API endpoints for seamless integration
+- **Multiple AI Models**: Support for various OpenRouter AI models (GPT-3.5, GPT-4, Claude, etc.)
+- **Customizable Prompts**: Flexible prompt system for different content types
+- **Temperature Control**: Adjustable creativity levels for AI responses
+- **Real-time Generation**: Instant content creation with live preview
 
-🎨 Modern Web Interface
+### 🔄 Automated Workflow
 
-Responsive Design: Mobile-first approach with beautiful UI
-Real-time Updates: Live content generation and status updates
-Content Management: Easy browsing and management of generated content
-Type Selection: Predefined content types (NPC Names, Items, Quests, etc.)
+- **N8N Integration**: Sophisticated workflow automation using N8N
+- **Content Approval System**: Review and approve generated content before saving
+- **Notion Database Sync**: Automatic saving of approved content to Notion
+- **Webhook Architecture**: RESTful API endpoints for seamless integration
 
-📊 Content Management
+### 🎨 Modern Web Interface
 
-Notion Integration: Centralized content storage and organization
-Status Tracking: Monitor content approval and completion status
-Search & Filter: Easy content discovery and management
-Export Options: Multiple formats for content export
+- **Responsive Design**: Mobile-first approach with beautiful UI
+- **Real-time Updates**: Live content generation and status updates
+- **Content Management**: Easy browsing and management of generated content
+- **Type Selection**: Predefined content types (NPC Names, Items, Quests, etc.)
 
-🏗️ Architecture
-mermaidgraph TB
+### 📊 Content Management
+
+- **Notion Integration**: Centralized content storage and organization
+- **Status Tracking**: Monitor content approval and completion status
+- **Search & Filter**: Easy content discovery and management
+- **Export Options**: Multiple formats for content export
+
+## 🏗️ Architecture
+
+```mermaid
+graph TB
     A[Frontend - Vercel] --> B[N8N Workflow - Render]
     B --> C[OpenRouter AI API]
     B --> D[Notion Database]
@@ -60,53 +65,66 @@ mermaidgraph TB
     B1 --> B2
     B2 --> B3
     B3 --> B4
-🚀 Tech Stack
-Frontend
+```
 
-Framework: HTML5, CSS3, JavaScript (ES6+)
-Styling: Custom CSS with modern design principles
-Deployment: Vercel
-Features: Responsive design, real-time updates, modern UI/UX
+## 🚀 Tech Stack
 
-Backend/Workflow
+### Frontend
 
-Automation: N8N (Node-based workflow automation)
-Deployment: Render
-AI Integration: OpenRouter API
-Database: Notion API integration
+- **Framework**: HTML5, CSS3, JavaScript (ES6+)
+- **Styling**: Custom CSS with modern design principles
+- **Deployment**: Vercel
+- **Features**: Responsive design, real-time updates, modern UI/UX
 
-External Services
+### Backend/Workflow
 
-AI Provider: OpenRouter (GPT-3.5, GPT-4, Claude, etc.)
-Database: Notion Database
-Hosting: Vercel (Frontend) + Render (Backend)
+- **Automation**: N8N (Node-based workflow automation)
+- **Deployment**: Render
+- **AI Integration**: OpenRouter API
+- **Database**: Notion API integration
 
-📋 Prerequisites
+### External Services
+
+- **AI Provider**: OpenRouter (GPT-3.5, GPT-4, Claude, etc.)
+- **Database**: Notion Database
+- **Hosting**: Vercel (Frontend) + Render (Backend)
+
+## 📋 Prerequisites
+
 Before running this project, make sure you have:
 
-N8N Instance: Self-hosted or cloud N8N instance
-OpenRouter API Key: For AI content generation
-Notion Integration: Database setup and API token
-Node.js: Version 16+ (for local development)
+- **N8N Instance**: Self-hosted or cloud N8N instance
+- **OpenRouter API Key**: For AI content generation
+- **Notion Integration**: Database setup and API token
+- **Node.js**: Version 16+ (for local development)
 
-🛠️ Installation & Setup
+## 🛠️ Installation & Setup
 
-1. Clone the Repository
-bashgit clone https://github.com/yourusername/ai-game-content-generator.git
+### 1. Clone the Repository
+
+```bash
+git clone https://github.com/Altas463/ai-game-content-generator.git
 cd ai-game-content-generator
+```
 
-2. N8N Workflow Setup
-bash# Import the workflow JSON file into your N8N instance
+### 2. N8N Workflow Setup
+
+```bash
+# Import the workflow JSON file into your N8N instance
 File: n8n-workflow.json
+```
 
 Configure the following credentials in N8N:
 - OpenRouter API Key
 - Notion API Token
 - Database ID
 
-3. Environment Configuration
-N8N Workflow Variables
-javascript// OpenRouter API Configuration
+### 3. Environment Configuration
+
+#### N8N Workflow Variables
+
+```javascript
+// OpenRouter API Configuration
 OPENROUTER_API_KEY=sk-or-v1-your-api-key
 OPENROUTER_BASE_URL=https://openrouter.ai/api/v1/chat/completions
 
@@ -117,43 +135,51 @@ NOTION_DATABASE_ID=your-database-id
 // Webhook URLs (auto-generated by N8N)
 GENERATE_CONTENT_WEBHOOK=https://your-n8n-instance.onrender.com/webhook/generate-content
 APPROVE_CONTENT_WEBHOOK=https://your-n8n-instance.onrender.com/webhook/approve-content
-Frontend Configuration
-javascript// Update API endpoints in your frontend JavaScript
+```
+
+#### Frontend Configuration
+
+```javascript
+// Update API endpoints in your frontend JavaScript
 const API_BASE_URL = 'https://your-n8n-instance.onrender.com';
 const GENERATE_ENDPOINT = `${API_BASE_URL}/webhook/generate-content`;
 const APPROVE_ENDPOINT = `${API_BASE_URL}/webhook/approve-content`;
+```
 
+## 🎯 Usage
 
-🎯 Usage
+### 1. Generate Content
 
-1. Generate Content
-Visit the frontend application
-Select content type (NPC Name, Item, Quest, etc.)
-Enter your custom prompt or use defaults
-Choose AI model and temperature settings
-Click "Generate" to create content
+1. Visit the frontend application
+2. Select content type (NPC Name, Item, Quest, etc.)
+3. Enter your custom prompt or use defaults
+4. Choose AI model and temperature settings
+5. Click "Generate" to create content
 
-2. Approve & Save
-Review the generated content
-Click "Approve" to save to Notion
-Content is automatically organized in your Notion database
-Track status and manage your content library
+### 2. Approve & Save
 
-3. Manage Content
-Access your Notion database directly
-Filter by status, type, or creation date
-Export content for use in your games
-Edit or update content as needed
+1. Review the generated content
+2. Click "Approve" to save to Notion
+3. Content is automatically organized in your Notion database
+4. Track status and manage your content library
 
-🚀 Deployment
-Frontend (Vercel)
+### 3. Manage Content
+
+1. Access your Notion database directly
+2. Filter by status, type, or creation date
+3. Export content for use in your games
+4. Edit or update content as needed
+
+## 🚀 Deployment
+
+### Frontend (Vercel)
 
 1. Connect your GitHub repository to Vercel
 2. Configure build settings (no build process needed)
 3. Set environment variables if needed
 4. Deploy automatically on push to main branch
 
-Backend (Render)
+### Backend (Render)
 
 1. Deploy N8N instance on Render
 2. Import workflow JSON file
@@ -161,77 +187,88 @@ Backend (Render)
 4. Set up webhooks and credentials
 5. Activate the workflow
 
-🎨 Customization
-Adding New Content Types
+## 🎨 Customization
 
-Update the frontend dropdown options
-Modify the N8N workflow to handle new types
-Add corresponding columns to Notion database
-Update validation logic as needed
+### Adding New Content Types
 
-🐛 Troubleshooting
-Common Issues
-N8N Workflow Not Executing
+1. Update the frontend dropdown options
+2. Modify the N8N workflow to handle new types
+3. Add corresponding columns to Notion database
+4. Update validation logic as needed
 
-Check webhook URLs are correctly configured
-Verify API credentials are set up properly
-Ensure workflow is activated
-Check N8N logs for detailed error messages
+## 🐛 Troubleshooting
 
-Frontend API Connection Issues
+### Common Issues
 
-Verify backend URLs in frontend configuration
-Check CORS settings in N8N
-Ensure webhooks are properly deployed
-Test API endpoints directly
+#### N8N Workflow Not Executing
 
-Notion Integration Problems
+- Check webhook URLs are correctly configured
+- Verify API credentials are set up properly
+- Ensure workflow is activated
+- Check N8N logs for detailed error messages
 
-Verify Notion API token permissions
-Check database ID is correct
-Ensure column names match exactly
-Verify data types are properly configured
+#### Frontend API Connection Issues
 
-🤝 Contributing
-We welcome contributions! Please see our Contributing Guidelines for details.
-Development Process
+- Verify backend URLs in frontend configuration
+- Check CORS settings in N8N
+- Ensure webhooks are properly deployed
+- Test API endpoints directly
 
-Fork the repository
-Create a feature branch
-Make your changes
-Test thoroughly
-Submit a pull request
+#### Notion Integration Problems
 
-Code Style
+- Verify Notion API token permissions
+- Check database ID is correct
+- Ensure column names match exactly
+- Verify data types are properly configured
 
-Use consistent indentation (2 spaces)
-Follow JavaScript ES6+ standards
-Add comments for complex logic
-Test all new features
+## 🤝 Contributing
 
-📄 License
-This project is licensed under the MIT License - see the LICENSE file for details.
-🙏 Acknowledgments
+We welcome contributions! Please see our [Contributing Guidelines](CONTRIBUTING.md) for details.
 
-OpenRouter for providing access to multiple AI models
-N8N for the powerful workflow automation platform
-Notion for the excellent database and API
-Vercel & Render for reliable hosting services
+### Development Process
 
-📞 Support
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Test thoroughly
+5. Submit a pull request
+
+### Code Style
+
+- Use consistent indentation (2 spaces)
+- Follow JavaScript ES6+ standards
+- Add comments for complex logic
+- Test all new features
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🙏 Acknowledgments
+
+- [OpenRouter](https://openrouter.ai) for providing access to multiple AI models
+- [N8N](https://n8n.io) for the powerful workflow automation platform
+- [Notion](https://notion.so) for the excellent database and API
+- [Vercel](https://vercel.com) & [Render](https://render.com) for reliable hosting services
+
+## 📞 Support
+
 If you have any questions or need help:
 
-GitHub Issues: Report bugs or request features
-Documentation: Check the docs/ folder for detailed guides
-Community: Join our discussions in GitHub Discussions
+- **GitHub Issues**: Report bugs or request features
+- **Documentation**: Check the `docs/` folder for detailed guides
+- **Community**: Join our discussions in [GitHub Discussions](https://github.com/Altas463/ai-game-content-generator/discussions)
 
-🎉 Demo
+## 🎉 Demo
+
 Check out our live demo to see the application in action:
 
-Frontend Demo: [https://your-vercel-app.vercel.app](https://ai-game-content-generator.vercel.app/)
-API Documentation: Available in the docs/ folder
-Video Tutorial: Coming soon!
+- **Frontend Demo**: [https://ai-game-content-generator.vercel.app](https://ai-game-content-generator.vercel.app/)
+- **API Documentation**: Available in the `docs/` folder
+- **Video Tutorial**: Coming soon!
 
+---
 
-Built with ❤️ for the game development community
+**Built with ❤️ for the game development community**
+
 Happy content generating! 🎮✨
