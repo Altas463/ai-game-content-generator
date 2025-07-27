@@ -97,12 +97,12 @@ cd ai-game-content-generator
 
 2. N8N Workflow Setup
 bash# Import the workflow JSON file into your N8N instance
-# File: n8n-workflow.json
+File: n8n-workflow.json
 
-# Configure the following credentials in N8N:
-# - OpenRouter API Key
-# - Notion API Token
-# - Database ID
+Configure the following credentials in N8N:
+- OpenRouter API Key
+- Notion API Token
+- Database ID
 
 3. Environment Configuration
 N8N Workflow Variables
