@@ -66,7 +66,7 @@ graph TB
     B2 --> B3
     B3 --> B4
 ```
-
+![Logo](workflow.png)
 ## 🚀 Tech Stack
 
 ### Frontend
