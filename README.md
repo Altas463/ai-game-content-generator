@@ -71,8 +71,8 @@ graph TB
 
 ### Frontend
 
-- **Framework**: HTML5, CSS3, JavaScript (ES6+)
-- **Styling**: Custom CSS with modern design principles
+- **Framework**: Next.JS
+- **Styling**: TailwindCSS
 - **Deployment**: Vercel
 - **Features**: Responsive design, real-time updates, modern UI/UX
 
